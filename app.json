@@ -1,0 +1,12 @@
+{
+  "name": "poc-expo-ant-fireauth",
+  "displayName": "poc-expo-ant-fireauth",
+  "expo": {
+    "name": "poc-expo-ant-fireauth",
+    "slug": "poc-expo-ant-fireauth",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
