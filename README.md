@@ -4,7 +4,7 @@
 
 Web demo: [https://poc-expo-ant-fireauth.web.app/](https://poc-expo-ant-fireauth.web.app/)
 
-## Demo build Android
+## Demo Android
 
 ![Demo A](repo_images/demo_a.png "Demo A")
 
