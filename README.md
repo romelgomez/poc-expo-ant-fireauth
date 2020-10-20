@@ -10,7 +10,7 @@ Web demo: [https://poc-expo-ant-fireauth.web.app/](https://poc-expo-ant-fireauth
 
 ## To Do
 
-- [ ] Add [REACT NATIVE FIREBASE](https://rnfirebase.io/)
+- [x] Add [REACT NATIVE FIREBASE](https://rnfirebase.io/)
   - [ ] Users can create account using a phone number
   - [ ] users can create account using an email and password
   - [ ] users can create account using their google account
