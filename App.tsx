@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { Button, WhiteSpace, WingBlank } from '@ant-design/react-native';
+import { StyleSheet, Text, View, TextInput } from 'react-native';
+import { Button, WhiteSpace, WingBlank, InputItem } from '@ant-design/react-native';
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-community/google-signin';
 
@@ -14,6 +14,48 @@ import { GoogleSignin } from '@react-native-community/google-signin';
 GoogleSignin.configure({
   webClientId: '624506665751-lmhtr4tng9cu3psnei7afboigoq3vbmh.apps.googleusercontent.com',
 });
+
+
+function PhoneSignIn() {
+  // If null, no SMS has been sent
+  const [confirm, setConfirm] = useState<FirebaseAuthTypes.ConfirmationResult | null>(null);
+
+  const [code, setCode] = useState('');
+
+  // Handle the button press
+  async function signInWithPhoneNumber(phoneNumber: string) {
+    const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
+    setConfirm(confirmation);
+  }
+
+  function confirmCode() {
+
+    if (confirm) {
+      confirm.confirm(code)
+        .then(() => {})
+        .catch((reason) => {
+          console.error(reason);
+        });
+    }
+
+  }
+
+  if (!confirm) {
+    return (
+      <Button onPress={() => signInWithPhoneNumber('+51 980-653-479')} >Phone Number Sign In</Button>
+    );
+  }
+
+  return (
+    <>
+      <TextInput style={{ height: 40, borderColor: 'gray', borderWidth: 1 }} value={code} onChangeText={text => setCode(text)} placeholder="Confirm Code" />
+
+      <WhiteSpace size="lg" />
+
+      <Button onPress={confirmCode} >Confirm Code</Button>
+    </>
+  );
+}
 
 function onGoogleButtonPress() {
 
@@ -134,6 +176,8 @@ function LoginApp() {
         <Button onPress={signInWithEmailAndPassword}>SignIn with Email</Button>
         <WhiteSpace size="lg" />
         <Button onPress={onGoogleButtonPress} >Google Sign-In</Button>
+        <WhiteSpace size="lg" />
+        <PhoneSignIn />
 
       </View>
     );
