@@ -1,5 +1,7 @@
 notes
 
+*.hprof
+
 # OSX
 #
 .DS_Store

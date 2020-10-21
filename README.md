@@ -40,3 +40,7 @@ In one terminal run:
 In other terminal run:
 
 **3)** `yarn android --verbose`
+
+## How to Generate a React Native Release Build APK for Android
+
+https://www.instamobile.io/android-development/generate-react-native-release-build-android/

@@ -9,8 +9,11 @@
 #  - https://github.com/react-native-google-signin/google-signin/issues/706#issuecomment-527659860
 # 
 
-# It's already generate in the project
-keytool -list -v -alias androiddebugkey -keystore android/app/debug.keystore -storepass android -keypass android
+# It's already generate in the project - this is for local 
+# keytool -list -v -alias androiddebugkey -keystore android/app/debug.keystore -storepass android -keypass android
+
+# It's already generate in the project - this is for dev_release.keystore
+keytool -list -v -alias develop -keystore android/app/dev_release.keystore -storepass password123 -keypass password123
 
 
 ### Signing the package ###
