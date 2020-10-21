@@ -1,58 +1,170 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Button, WhiteSpace, WingBlank } from '@ant-design/react-native';
+import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
+import { GoogleSignin } from '@react-native-community/google-signin';
+
+
+// import {
+//   GoogleSignin,
+//   GoogleSigninButton,
+//   statusCodes,
+// } from '@react-native-community/google-signin';
+
+GoogleSignin.configure({
+  webClientId: '624506665751-lmhtr4tng9cu3psnei7afboigoq3vbmh.apps.googleusercontent.com',
+});
+
+function onGoogleButtonPress() {
+
+  GoogleSignin.signIn()
+    .then((user) => {
+
+      // Create a Google credential with the token
+      const googleCredential = auth.GoogleAuthProvider.credential(user.idToken);
+
+      // Sign-in the user with the credential
+      return auth().signInWithCredential(googleCredential);
+
+    })
+    .then(() => {
+
+      console.log('Signed in with Google!');
+
+    })
+    .catch((reason) => {
+
+      console.error(reason);
+
+    });
+
+}
+
+
+
+
+
+function signInWithEmailAndPassword () {
+  auth()
+    .signInWithEmailAndPassword('v090625712@gmail.com', 'react_native_007')
+      .then(() => {
+        console.log('User signIn');
+      })
+      .catch(error => {
+        if (error.code === 'auth/invalid-email') {
+          console.log('That email address is invalid!');
+        }
+    
+        console.error(error);
+      });  
+}
+
+
+// function createUserWithEmailAndPassword() {
+//   auth()
+//     .createUserWithEmailAndPassword('v090625712@gmail.com', 'react_native_007')
+//       .then(() => {
+//         console.log('User account created & signed in!');
+//       })
+//       .catch(error => {
+//         if (error.code === 'auth/email-already-in-use') {
+//           console.log('That email address is already in use!');
+//         }    
+//         if (error.code === 'auth/invalid-email') {
+//           console.log('That email address is invalid!');
+//         }    
+//         console.error(error);
+//       });
+// }
+
+
+function signOut () {
+  auth()
+    .signOut()
+    .then(() => console.log('User signed out!')); 
+}
+
+function signInAnonymously() {
+  auth()
+    .signInAnonymously()
+    .then(() => {
+      console.log('User signed in anonymously');
+    })
+    .catch(error => {
+      if (error.code === 'auth/operation-not-allowed') {
+        console.log('Enable anonymous in your firebase console.');
+      }   
+      console.error(error);
+    });
+}
+
+// Sign up with email
+// Sign up with Apple
+// Sign up with Facebook
+// Sign up with google
+
+function LoginApp() {
+  // Set an initializing state whilst Firebase connects
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
+
+  // Handle user state changes
+  function onAuthStateChanged(user: FirebaseAuthTypes.User | null) {
+    setUser(user);
+    if (initializing) setInitializing(false);
+  }
+
+  useEffect(() => {
+    
+    return auth().onAuthStateChanged(onAuthStateChanged);
+
+  }, []);
+
+  if (initializing) return null;
+
+  console.log(user);
+
+  if (!user) {
+    return (
+      <View>
+        <Button onPress={signInAnonymously}>Login as Anonymous</Button>
+        <WhiteSpace size="lg" />
+        {/* <Button onPress={createUserWithEmailAndPassword}>CreateUser</Button>
+        <WhiteSpace size="lg" /> */}
+        <Button onPress={signInWithEmailAndPassword}>SignIn with Email</Button>
+        <WhiteSpace size="lg" />
+        <Button onPress={onGoogleButtonPress} >Google Sign-In</Button>
+
+      </View>
+    );
+  }
+
+  let nickname = '';
+
+  if (user && user.isAnonymous) {
+    nickname = 'Anonymous';
+  } else if (user && user.email === 'bmxandcode@gmail.com') {
+    nickname = 'Romel';
+  } else if ( user ) {
+    nickname = user.email || '';
+  }
+
+  return (
+    <View>
+      <Text>Welcome {nickname}</Text>
+      <WhiteSpace size="lg" />
+      <Button onPress={signOut}>SignOut</Button>
+    </View>
+  );
+}
 
 
 export default function App() {
   return (
     <View style={styles.container}>
 
-<WingBlank>
-        <WhiteSpace />
-        <Button>default</Button>
-        <WhiteSpace />
-        <Button disabled>default disabled</Button>
-        <WhiteSpace />
+      <LoginApp></LoginApp>
 
-        <Button type="primary">primary</Button>
-        <WhiteSpace />
-        <Button type="primary" disabled>
-          primary disabled
-        </Button>
-        <WhiteSpace />
-
-        <Button type="warning">warning</Button>
-        <WhiteSpace />
-        <Button type="warning" disabled>
-          warning disabled
-        </Button>
-        <WhiteSpace />
-
-        <Button loading>loading button</Button>
-
-        <Button activeStyle={false}>无点击反馈</Button><WhiteSpace />
-        <Button activeStyle={{ backgroundColor: 'red' }}>custom feedback style</Button><WhiteSpace />
-
-        <WingBlank
-          style={{
-            marginTop: 20,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
-          <Button type="ghost">ghost</Button>
-          <Button type="ghost" disabled>
-            ghost disabled
-          </Button>
-          <Button type="ghost" size="small">
-            ghost
-          </Button>
-        </WingBlank>
-      </WingBlank>
-
-
-      <Text>Open up App.tsx to start working on your app!</Text>
     </View>
   );
 }
